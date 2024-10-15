@@ -40,6 +40,14 @@ export class UsersService {
     });
   }
 
+  async findByEmail(email: string) {
+    return await this.prismaService.user.findUniqueOrThrow({
+      where: {
+        email: email,
+      }
+    });
+  }
+
   async update(id: number, updateUserInput: UpdateUserInput) {
     if (updateUserInput.password) {
       const salt = Number(this.configService.get('SALT_ROUNDS'))
