@@ -6,6 +6,8 @@ import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,7 +17,11 @@ import { PrismaModule } from './prisma/prisma.module';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+		ConfigModule.forRoot({
+			isGlobal: true,
+		}),
     PrismaModule,
+    UsersModule,
   ],
   providers: [AppResolver, PrismaService],
 })
