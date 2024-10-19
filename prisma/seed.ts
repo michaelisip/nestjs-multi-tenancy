@@ -2,11 +2,12 @@ import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from 'src/enums';
+import { environment } from 'src/config/environment';
 
 const prisma  = new PrismaClient();
 
 const password = '123'
-const salt = Number(process.env.SALT_ROUNDS)
+const salt = environment.jwt.salt_rounds
 const hash = bcrypt.hashSync(password, salt)
 
 const fakerUser = (): any => ({
