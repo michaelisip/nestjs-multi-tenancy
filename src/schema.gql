@@ -2,34 +2,47 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Role {
-  name: String!
-  users: [User!]!
-}
-
 type User {
   firstName: String!
   lastName: String
   email: String!
   password: String!
-  role: Role!
+  role: Role
 }
 
-type AuthResponse {
+type Role {
+  name: String!
+  users: [User!]
+}
+
+type LoginResponse {
   access_token: String!
+}
+
+type Seller {
+  firstName: String!
+  lastName: String
+  email: String!
+  password: String!
+  role: Role
 }
 
 type Query {
   sayHello: String!
   users: [User!]!
   user(id: Int!): User!
+  sellers: [Seller!]!
+  seller(id: Int!): Seller!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
-  login(loginInput: LoginInput!): AuthResponse!
+  login(loginInput: LoginInput!): LoginResponse!
+  createSeller(createSellerInput: CreateSellerInput!): Seller!
+  updateSeller(updateSellerInput: UpdateSellerInput!): Seller!
+  removeSeller(id: Int!): Seller!
 }
 
 input CreateUserInput {
@@ -50,4 +63,19 @@ input UpdateUserInput {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreateSellerInput {
+  firstName: String!
+  lastName: String
+  email: String!
+  password: String!
+}
+
+input UpdateSellerInput {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  id: Int!
 }

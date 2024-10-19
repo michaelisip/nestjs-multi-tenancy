@@ -1,45 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { CreateSellerInput } from './dto/create-seller.input';
+import { UpdateSellerInput } from './dto/update-seller.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from 'src/enums';
 
 @Injectable()
-export class UsersService {
+export class SellersService {
   constructor(
     private prismaService: PrismaService,
     private configService: ConfigService,
   ) {}
 
-  async create(createUserInput: CreateUserInput) {
+  async create(createSellerInput: CreateSellerInput) {
     const salt = Number(this.configService.get('SALT_ROUNDS'))
-    const password = await bcrypt.hash(createUserInput.password, salt)
+    const password = await bcrypt.hash(createSellerInput.password, salt)
 
-    const userRole = await this.prismaService.role.findFirst({
+    const sellerRole = await this.prismaService.role.findFirst({
       where: {
-        name: UserRole.User
+        name: UserRole.Seller,
       }
-    });
+    })
+
+    console.log(sellerRole)
+    console.log(UserRole.Seller)
 
     return await this.prismaService.user.create({
       data: {
-        ...createUserInput,
+        ...createSellerInput,
         password: password,
-        roleId: userRole.id,
-      },
-    });
+        roleId: sellerRole.id
+      }
+    })
   }
 
   async findAll() {
     return await this.prismaService.user.findMany({
       where: {
         role: {
-          name: UserRole.User,
+          name: UserRole.Seller,
         }
-      },
-    });
+      }
+    })
   }
 
   async findOne(id: number) {
@@ -50,18 +53,10 @@ export class UsersService {
     });
   }
 
-  async findByEmail(email: string) {
-    return await this.prismaService.user.findUniqueOrThrow({
-      where: {
-        email: email,
-      }
-    });
-  }
-
-  async update(id: number, updateUserInput: UpdateUserInput) {
-    if (updateUserInput.password) {
+  async update(id: number, updateSellerInput: UpdateSellerInput) {
+    if (updateSellerInput.password) {
       const salt = Number(this.configService.get('SALT_ROUNDS'))
-      updateUserInput.password = await bcrypt.hash(updateUserInput.password, salt)
+      updateSellerInput.password = await bcrypt.hash(updateSellerInput.password, salt)
     }
 
     return await this.prismaService.user.update({
@@ -69,9 +64,9 @@ export class UsersService {
         id: id,
       },
       data: {
-        ...updateUserInput
-      },
-    });
+        ...updateSellerInput
+      }
+    })
   }
 
   async remove(id: number) {

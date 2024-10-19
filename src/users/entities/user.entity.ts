@@ -17,6 +17,6 @@ export class User {
   @Field(() => String)
   password: string;
 
-  @Field(() => Role)
-  role: Role;
+  @Field(() => Role, { nullable: true })
+  role?: Role;
 }

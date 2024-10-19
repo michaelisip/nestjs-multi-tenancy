@@ -2,7 +2,7 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
 
 @InputType()
-export class CreateUserInput {
+export class CreateSellerInput {
   @Field(() => String)
   firstName: string;
 

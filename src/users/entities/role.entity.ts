@@ -6,6 +6,6 @@ export class Role {
   @Field(() => String)
   name: string;
 
-  @Field(() => [User])
-  users: Array<User>;
+  @Field(() => [User], { nullable: true })
+  users?: Array<User>;
 }
