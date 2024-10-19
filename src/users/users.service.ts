@@ -16,10 +16,17 @@ export class UsersService {
     const salt = Number(this.configService.get('SALT_ROUNDS'))
     const password = await bcrypt.hash(createUserInput.password, salt)
 
+    const userRole = await this.prismaService.role.findFirst({
+      where: {
+        name: 'user'
+      }
+    });
+
     return await this.prismaService.user.create({
       data: {
         ...createUserInput,
-        password: password
+        password: password,
+        roleId: userRole.id,
       }
     });
   }
