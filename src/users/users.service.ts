@@ -54,7 +54,10 @@ export class UsersService {
     return await this.prismaService.user.findUniqueOrThrow({
       where: {
         email: email,
-      }
+      },
+      include: {
+        role: true
+      },
     });
   }
 
